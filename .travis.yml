@@ -89,7 +89,6 @@ install:
   # note: we install packages in reverse dependency order, so that we can be
   # sure we end up with the version we specify (and not the version specified
   # by a downstream dependency)
-  - pip install -e .[tests]
   - .ci/$MODE.sh install
   - pip install $TF_VERSION $NENGO_VERSION $NUMPY_VERSION
   - conda list -e

@@ -5,6 +5,7 @@ NAME=$0
 COMMAND=$1
 
 if [[ "$COMMAND" == "install" ]]; then
+    pip install -e .[tests]
     pip install git+https://github.com/drasmuss/spaun2.0.git
 elif [[ "$COMMAND" == "script" ]]; then
     pytest $TEST_ARGS -v -n 2 --color=yes --pyargs nengo
