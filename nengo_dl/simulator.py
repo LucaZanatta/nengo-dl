@@ -111,7 +111,11 @@ class Simulator:
 
         ("nengo/tests/test_ensemble.py:test_gain_bias",
          "use allclose instead of array_equal (see "
-         "tests/test_simulator.py:test_gain_bias")
+         "tests/test_simulator.py:test_gain_bias"),
+
+        ("nengo/tests/test_transforms.py:test_convolution*",
+         "allclose precision needs to be adjusted for float32 (see "
+         "tests/test_transforms.py:test_convolution"),
     ]
 
     def __init__(self, network, dt=0.001, seed=None, model=None,

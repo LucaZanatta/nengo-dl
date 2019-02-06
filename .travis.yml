@@ -36,6 +36,11 @@ jobs:
          NUMPY_VERSION="numpy==1.12.1"
          PYTHON_VERSION="3.4"
          PIP_UPGRADE_STRATEGY="only-if-needed"
+  - env: MODE="gpu"
+         NENGO_VERSION="git+https://github.com/nengo/nengo.git"
+         TF_VERSION="tensorflow-gpu"
+         TEST_ARGS="--device /gpu:0"
+    cache: false
   - env: TEST_ARGS="--dtype float64 --simulator-only"
   - env: TEST_ARGS="--unroll_simulation 5 --simulator-only"
   - env: TEST_ARGS="--inference-only --simulator-only"
@@ -70,7 +75,7 @@ before_install:
       rm -rf $HOME/miniconda;
       wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
       bash miniconda.sh -b -p $HOME/miniconda;
-      conda create -q -y -n test python=$PYTHON_VERSION pip;
+      conda create -q -y -n test python=$PYTHON_VERSION;
     fi
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
@@ -101,3 +106,6 @@ before_cache:
 
 after_success:
   - .ci/$MODE.sh after_success
+
+after_script:
+  - .ci/$MODE.sh after_script
