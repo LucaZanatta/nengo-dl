@@ -27,6 +27,10 @@ jobs:
   - env: MODE="docs"
   - env: MODE="test"
     cache: false  # disable the cache for one build to make sure that works
+  - env: MODE="gpu"
+         NENGO_VERSION="git+https://github.com/nengo/nengo.git"
+         TF_VERSION="tensorflow-gpu"
+         TEST_ARGS="--device /gpu:0 --performance"
   - env: MODE="coverage"
          NENGO_VERSION="git+https://github.com/nengo/nengo.git"
          TF_VERSION="tensorflow --pre"
@@ -36,11 +40,6 @@ jobs:
          NUMPY_VERSION="numpy==1.12.1"
          PYTHON_VERSION="3.4"
          PIP_UPGRADE_STRATEGY="only-if-needed"
-  - env: MODE="gpu"
-         NENGO_VERSION="git+https://github.com/nengo/nengo.git"
-         TF_VERSION="tensorflow-gpu"
-         TEST_ARGS="--device /gpu:0"
-    cache: false
   - env: TEST_ARGS="--dtype float64 --simulator-only"
   - env: TEST_ARGS="--unroll_simulation 5 --simulator-only"
   - env: TEST_ARGS="--inference-only --simulator-only"

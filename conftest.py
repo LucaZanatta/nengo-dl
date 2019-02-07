@@ -11,15 +11,18 @@ from nengo_dl import config, simulator, utils
 
 
 def pytest_runtest_setup(item):
-    if getattr(item.obj, "gpu", False) and not utils.tf_gpu_installed:
+    if item.get_closest_marker("gpu", False) and not utils.tf_gpu_installed:
         pytest.skip("This test requires tensorflow-gpu")
     elif (hasattr(item, "fixturenames") and
           "Simulator" not in item.fixturenames and
           item.config.getvalue("--simulator-only")):
         pytest.skip("Only running tests that require a Simulator")
-    elif getattr(item.obj, "training", False) and item.config.getvalue(
+    elif item.get_closest_marker("training", False) and item.config.getvalue(
             "--inference-only"):
         pytest.skip("Skipping training test in inference-only mode")
+    elif (item.get_closest_marker("performance", False)
+          and not item.config.getvalue("--performance")):
+        pytest.skip("Skipping performance test")
 
 
 def pytest_addoption(parser):
@@ -33,7 +36,9 @@ def pytest_addoption(parser):
     parser.addoption("--unroll_simulation", default=1, type=int,
                      help="unroll_simulation value for Simulator")
     parser.addoption("--device", default=None,
-                     help="device parameter for Simulator")
+                     help="Device parameter for Simulator")
+    parser.addoption("--performance", action="store_true", default=False,
+                     help="Run performance tests")
 
 
 @pytest.fixture(scope="session")
